@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Press+Start+2P&family=Rokkitt:ital,wght@0,100..900;1,100..900&display=swap');
+
+html{
+    border: 0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: "Outfit", monospace, sans-serif; 
+    font-weight: 400;
+    font-style: normal;
+    padding: 1rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;
+    padding-top: 1rem;
+}
+
+nav{
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+a{
+    color: #860000;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 2px;
+}
+a:hover, a:focus-visible{
+    text-decoration: dotted underline;
+    text-decoration-thickness: 2px;
+    outline: none;
+}
+
+.text-block{
+    margin: 0 auto;
+    min-width: 58ch;
+    max-width: 100%;
+}
+
+
+.nav-profile{
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+.profile-picture{
+    display: inline-block;
+    border-radius: 50%;
+    width: 6ch;
+    margin-right: 1ch;
+}
+.nav-profile h1{
+    font-size: 1.33rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-items{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.nav-item{
+    margin: 0 0 0 2ch;
+    position: relative;
+}
+a.nav-item:hover::before, a.nav-item:focus-visible::before{
+    position: absolute;
+    content:"↓";
+    left: 0;
+    right: 0;
+    transform: translateY(-.8rem);
+    text-align: center;
+    animation: 750ms ease-out 300ms infinite alternate arrow-bounce;
+}
+@keyframes arrow-bounce {
+  from {
+    /* pushes the sun down past the viewport */
+    transform: translateY(-.8rem);
+  }
+  to {
+    /* returns the sun to its default position */
+    transform: translateY(-1.25rem);
+  }
+}
+.you-are-here{
+    &::before{
+        content:"("
+    }
+    &::after{
+        content:")"
+    }
+}
+
+li{
+    margin-bottom: .33rem;
+}
+
+ul > li{
+    a:hover::after, a:focus-visible::after{
+        position: absolute;
+        content:"←";
+        animation: 750ms ease-out 0s infinite alternate arrow-slide;
+    }
+}
+
+@keyframes arrow-slide {
+  from {
+    transform: translateX(.33rem);
+  }
+  to {
+    transform: translateX(1rem);
+  }
+}
+
+.text{
+    font-family: 'Rokkitt';
+}

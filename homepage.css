@@ -1,0 +1,20 @@
+
+
+main{
+    flex-grow: 1;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+@media screen and (orientation: landscape)  {
+    body{
+        flex-direction: column-reverse;
+    }
+}
+
+@media screen and (orientation: portrait)  {
+    .nav-items{
+        justify-content: center;
+    }
+}
