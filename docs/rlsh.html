@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body{
+            font-family: monospace;
+        }
+
+        #initial-cursor::before{
+            display: inline-block;
+            content: " ";
+            width: 1ch;
+        }
+
+        .marker{
+            border-bottom: solid 2px black;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="terminal"></div>
+
+    <script>
+
+        const terminal = document.getElementById('terminal');
+
+
+        async function wait(ms){
+            return new Promise(function(resolve, reject){
+                window.setTimeout(function(){
+                    resolve()
+                }, ms);
+            });
+        }
+
+        async function* generate(){
+            yield 'Doing something';
+            await wait(1000);
+            yield 'Doing something.'
+            await wait(1000);
+            yield 'Doing something..'
+            await wait(1000);
+            yield 'Doing something...'
+            await wait(1000);
+            yield 'Doing something....'
+            await wait(1000);
+            yield 'Doing something.....'
+            await wait(1000);
+            yield "Did something"
+        }
+
+        const commands = {
+            curl: async function*(argList){
+                yield 'curling'
+            },
+            "test-generator": generate
+        }
+
+        function boot(terminalElement){
+
+            let currentIndex = 0;
+            
+            function resetBuffer(){
+                buffer.innerHTML = '<span id="initial-cursor" class="marker"></span>';
+                currentIndex = 0;
+            }
+
+            const buffer = document.createElement("DIV");
+            buffer.id = 'buffer';
+            resetBuffer();
+            terminalElement.appendChild(buffer);
+
+            
+            function getCurrentMarker(){
+                return buffer.childNodes[currentIndex];
+            }
+
+            function moveIndex(index){
+                if(index < 0){
+                    return;
+                }else if(index >= buffer.childNodes.length){
+                    return;
+                }
+                const prev = getCurrentMarker();
+                if(prev){
+                    prev.className = '';
+                }
+                currentIndex = index;
+                const next = getCurrentMarker();
+                if(next){
+                    next.className = 'marker';
+                }
+            }
+
+            function span(char){
+                const s = document.createElement('SPAN');
+                s.textContent = char;
+                return s;
+            }
+
+            function writeChar(char, index){
+                const reference = buffer.childNodes[index];
+                const s = span(char)
+                if(reference){
+                    buffer.insertBefore(s, reference)
+                }else{
+                    buffer.appendChild(s);
+                }
+                moveIndex(currentIndex+1);
+            }
+
+            function deleteChar(index){
+                const reference = buffer.childNodes[index-1];
+                buffer.removeChild(reference)
+                moveIndex(index-1)
+            }
+
+            function lineOut(str){
+                const o = document.createElement('DIV');
+                o.innerText = str;
+                terminalElement.insertBefore(o, buffer)
+            }
+
+            function replaceLineOut(str){
+                buffer.previousSibling.innerHTML = str;
+            }
+
+            async function interpret(bufferString){
+                const parts = bufferString.split(/\s/g)
+                const commandName = parts[0];
+                const command = commands[commandName];
+                if(command){  
+                    lineOut(`> ${commandName}`)
+                    let generator = await command()
+                    let result = await generator.next();
+                    lineOut(result.value);
+                    let done = result.done;
+                    while(!done){
+                        result = await generator.next();
+                        if(result.value){
+                            const completeChar = result.done ? '> ' : '';
+                            replaceLineOut(`${completeChar}${result.value}`);
+                        }
+                        done = result.done;
+                    }
+                }else{
+                    lineOut(`Command "${commandName}" not found.`)
+                }
+            }
+
+            async function commitBuffer(){
+                const bufferString = buffer.textContent;
+                resetBuffer();
+                await interpret(bufferString);
+            }
+
+            window.addEventListener('keydown', function(event){
+                console.log(event.key)
+
+                switch(event.key){
+                    case 'ArrowLeft':
+                        moveIndex(currentIndex-1);
+                        break;
+                    case 'ArrowRight':
+                        moveIndex(currentIndex+1);
+                        break;
+                    case 'Backspace':
+                        deleteChar(currentIndex);
+                        break;
+                    case 'Enter': 
+                        commitBuffer();
+                        break;
+                    default:
+                        writeChar(event.key, currentIndex)
+                }
+
+            })
+
+        }
+
+        boot(terminal)
+
+    </script>
+</body>
+</html>
