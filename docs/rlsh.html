@@ -6,10 +6,6 @@
     <title>Document</title>
     <style>
 
-        body{
-            font-family: monospace;
-        }
-
         #initial-cursor::before{
             display: inline-block;
             content: " ";
@@ -17,13 +13,44 @@
         }
 
         .marker{
-            border-bottom: solid 2px black;
+            border-bottom: solid 2px #00ab4d;
+        }
+
+        #terminal{
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            margin: 1rem;
+            padding: 1rem;
+            background-color: #000000;
+            color: #00ab4d;
         }
 
     </style>
+    <link rel="stylesheet" href="style/main.css" />
 </head>
 <body>
-    <div id="terminal"></div>
+
+    <nav>
+        <div class="nav-profile">
+            <img class="profile-picture" src="images/headthumb2.png" />
+            <div>
+                <h1>Rob Liota</h1>
+                <div>Software Developer</div>
+            </div>
+        </div>
+        <div class="nav-items">
+            <a class="nav-item" href="/">Home</a>
+            <span class="you-are-here nav-item">rlsh</span>
+            <a class="nav-item" href="thoughts.html">Thoughts</a>
+            <a class="nav-item" href="liota-resume.pdf" target="_blank">Resumé</a>
+        </div>
+    </nav>
+
+
+    <main>
+
+        <div tabindex="0" id="terminal"></div>
+    </main>
 
     <script>
 
@@ -133,9 +160,11 @@
             async function interpret(bufferString){
                 const parts = bufferString.split(/\s/g)
                 const commandName = parts[0];
+                if(!commandName){
+                    return;
+                }
                 const command = commands[commandName];
-                if(command){  
-                    lineOut(`> ${commandName}`)
+                if(command){
                     let generator = await command()
                     let result = await generator.next();
                     lineOut(result.value);
@@ -143,8 +172,7 @@
                     while(!done){
                         result = await generator.next();
                         if(result.value){
-                            const completeChar = result.done ? '> ' : '';
-                            replaceLineOut(`${completeChar}${result.value}`);
+                            replaceLineOut(result.value);
                         }
                         done = result.done;
                     }
@@ -155,6 +183,7 @@
 
             async function commitBuffer(){
                 const bufferString = buffer.textContent;
+                lineOut(`> ${bufferString}`)
                 resetBuffer();
                 await interpret(bufferString);
             }
@@ -174,6 +203,9 @@
                         break;
                     case 'Enter': 
                         commitBuffer();
+                        break;
+                    case 'Shift': 
+                    case 'Tab': 
                         break;
                     default:
                         writeChar(event.key, currentIndex)
