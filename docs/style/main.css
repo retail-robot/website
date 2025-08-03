@@ -28,6 +28,12 @@ nav{
     justify-content: space-between;
 }
 
+nav .nav-profile{
+    width: 100%;
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
 a{
     color: #860000;
     text-underline-offset: 3px;
