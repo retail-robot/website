@@ -12,9 +12,3 @@ main{
         flex-direction: column-reverse;
     }
 }
-
-@media screen and (orientation: portrait)  {
-    .nav-items{
-        justify-content: center;
-    }
-}
