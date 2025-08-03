@@ -35,11 +35,9 @@ a.nav-item:hover::before, a.nav-item:focus-visible::before{
 }
 @keyframes arrow-bounce {
   from {
-    /* pushes the sun down past the viewport */
     transform: translateY(-.8rem);
   }
   to {
-    /* returns the sun to its default position */
     transform: translateY(-1.25rem);
   }
 }
