@@ -55,7 +55,6 @@ a.nav-item:hover::before, a.nav-item:focus-visible::before{
 
     getItems(){
         const currentPage = this.getAttribute("current-page");
-        console.log(currentPage)
         return navContents.map(function(n){
             let page = currentPage;
             if(!currentPage){
