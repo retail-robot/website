@@ -80,6 +80,8 @@ class Terminal extends HTMLElement{
         this.initialCursor.className = `${NAMESPACE}-marker`;
         this.initialCursor.setAttribute(`${NAMESPACE}-initial-cursor`, "")
 
+        this.history = [];
+
         this.commands = commands;
 
         this.keyHandler = (function(event){
@@ -99,6 +101,8 @@ class Terminal extends HTMLElement{
                 case 'Shift': 
                 case 'Tab':
                 case 'Meta': 
+                case 'ArrowUp':
+                case 'ArrowDown':
                     break;
                 default:
                     this.writeChar(event.key, this.currentIndex)
