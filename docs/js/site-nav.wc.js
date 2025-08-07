@@ -1,7 +1,6 @@
 
 const navContents = [
     { name: "Home", href: "/"},
-    { name: "Thoughts", href: "thoughts.html"},
     { name: "rlsh", href: "rlsh.html"},
     { name: "Resumé", href: "liota-resume.pdf"}
 ]
