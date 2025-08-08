@@ -51,24 +51,6 @@ a:hover, a:focus-visible{
     max-width: 100%;
 }
 
-
-.nav-profile{
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-}
-.profile-picture{
-    display: inline-block;
-    border-radius: 50%;
-    width: 6ch;
-    margin-right: 1ch;
-}
-.nav-profile h1{
-    font-size: 1.33rem;
-    margin: 0;
-    padding: 0;
-}
-
 li{
     margin-bottom: .33rem;
 }
